@@ -16,7 +16,7 @@ public class JwtUtil {
 
     private String secret = "unitech";
 
-    public String extractUsername(String token) {
+    public String extractPin(String token) {
         return extractClaim(token, Claims::getSubject);
     }
 
@@ -49,7 +49,7 @@ public class JwtUtil {
     }
 
     public Boolean validateToken(String token, UserDetails userDetails) {
-        final String username = extractUsername(token);
+        final String username = extractPin(token);
         return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
     }
 }

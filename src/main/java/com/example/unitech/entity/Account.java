@@ -19,7 +19,7 @@ public class Account {
     @Column(unique = true)
     private String accountNumber;
     private boolean active;
-    private Double balance;
+    private double balance;
     @ManyToOne(fetch = FetchType.LAZY)
     private User user;
 
@@ -35,4 +35,13 @@ public class Account {
         return getClass().hashCode();
     }
 
+    @Override
+    public String toString() {
+        return "Account{" +
+                "id=" + id +
+                ", accountNumber='" + accountNumber + '\'' +
+                ", active=" + active +
+                ", balance=" + balance +
+                '}';
+    }
 }

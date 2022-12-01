@@ -1,5 +1,6 @@
 package com.example.unitech.filter;
 
+import com.example.unitech.exception.NotFoundException;
 import com.example.unitech.service.CustomUserDetailsService;
 import com.example.unitech.util.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,20 +36,23 @@ public class JwtFilter extends OncePerRequestFilter {
 
         if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
             token = authorizationHeader.substring(7);
-            userName = jwtUtil.extractUsername(token);
+            userName = jwtUtil.extractPin(token);
         }
 
         if (userName != null && SecurityContextHolder.getContext().getAuthentication() == null) {
 
-            UserDetails userDetails = service.loadUserByUsername(userName);
+            try{
+                UserDetails userDetails = service.loadUserByUsername(userName);
+                if (jwtUtil.validateToken(token, userDetails)) {
 
-            if (jwtUtil.validateToken(token, userDetails)) {
-
-                UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
-                        new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-                usernamePasswordAuthenticationToken
-                        .setDetails(new WebAuthenticationDetailsSource().buildDetails(httpServletRequest));
-                SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
+                    UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
+                            new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+                    usernamePasswordAuthenticationToken
+                            .setDetails(new WebAuthenticationDetailsSource().buildDetails(httpServletRequest));
+                    SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
+                }
+            } catch (NotFoundException ex){
+                throw new NotFoundException("İstifadəçi tapılmadı");
             }
         }
         filterChain.doFilter(httpServletRequest, httpServletResponse);
