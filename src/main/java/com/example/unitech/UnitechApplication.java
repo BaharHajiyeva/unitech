@@ -1,14 +1,13 @@
 package com.example.unitech;
 
-import com.example.unitech.filter.JwtFilter;
 import org.modelmapper.ModelMapper;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.client.RestTemplate;
 
-import javax.servlet.Filter;
 
 @SpringBootApplication
 public class UnitechApplication {
@@ -26,4 +25,7 @@ public class UnitechApplication {
     public ModelMapper modelMapper() {
         return new ModelMapper();
     }
+
+    @Bean
+    RestTemplate restTemplate(){return new RestTemplate();}
 }
