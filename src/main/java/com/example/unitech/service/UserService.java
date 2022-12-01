@@ -8,6 +8,6 @@ public interface UserService {
 
     UserDTO register(RegisterPayload payload);
 
-    String getToken(LoginPayload payload);
+    String login(LoginPayload payload);
 
 }

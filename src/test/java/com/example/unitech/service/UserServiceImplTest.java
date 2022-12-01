@@ -50,9 +50,6 @@ public class UserServiceImplTest {
     @Mock
     JwtUtil jwtUtil;
 
-
-
-
     @Test
     public void testRegister(){
 
@@ -84,7 +81,7 @@ public class UserServiceImplTest {
         OngoingStubbing<String> stringOngoingStubbing = Mockito.when(jwtUtil.generateToken("dummy"))
                 .thenReturn("dummyToken");
 
-        String result = userService.getToken(payload);
+        String result = userService.login(payload);
 
         assertNotSame(result,stringOngoingStubbing);
 

@@ -50,7 +50,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public String getToken(LoginPayload payload) {
+    public String login(LoginPayload payload) {
 
         try {
             authenticationManager.authenticate(

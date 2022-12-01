@@ -15,6 +15,8 @@ public class CurrencyController {
 
     private final CurrencyProvider provider;
 
+    // get currency pairs ->  /api/currency/USD/AZN/5
+
     @GetMapping("/{from}/{to}/{amount}")
     public CurrencyPairDTO getPair(@PathVariable String from,
                                    @PathVariable String to,
