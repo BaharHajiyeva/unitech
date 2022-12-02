@@ -113,7 +113,7 @@ public class AccountServiceImpl implements AccountService {
             account = optAccount.get();
             account.setBalance(payload.getAmount()+account.getBalance());
         } else {
-            throw new NotFoundException("Bu hesab mövcud deyil");
+            throw new NotFoundException("Belə bir aktiv hesabınız mövcud deyil");
         }
 
         return modelMapper.map(account,AccountDTO.class);
@@ -134,19 +134,13 @@ public class AccountServiceImpl implements AccountService {
             throw new NotFoundException("İstifadəçi tapılmadı");
         }
 
-        List<Account> accountsOfUser = accountRepo.findAllByUserAndActiveTrue(user);
-
-        Optional<Account> optFrom = accountRepo.findByAccountNumberAndActiveTrue(payload.getFromAccountNumber());
+        Optional<Account> optFrom = accountRepo.findByUserAndAccountNumberAndActiveTrue(user,payload.getFromAccountNumber());
         Account from;
         Account to;
 
         if(optFrom.isPresent()){
 
             from = optFrom.get();
-
-            if(!accountsOfUser.contains(from)){
-                throw new ForbiddenException("Məxaric etmək istədiyiniz hesab sizə aid deyil");
-            }
 
             Optional<Account> optTo = accountRepo.findByAccountNumber(payload.getToAccountNumber());
 
@@ -179,8 +173,8 @@ public class AccountServiceImpl implements AccountService {
                 throw new NotFoundException("Köçürmə etmək istədyiniz hesab mövcud deyil");
             }
         }else{ //
-            log.error("Hesabınız aktiv olmadığından köçürmə edə bilməzsiniz");
-            throw new ForbiddenException("Hesabınız aktiv olmadığından köçürmə edə bilməzsiniz");
+            log.error("Sizin belə bir aktiv hesabınız mövcud olmadığından köçürmə edə bilməzsiniz");
+            throw new ForbiddenException("Sizin belə bir aktiv hesabınız mövcud olmadığından köçürmə edə bilməzsiniz");
         }
 
         return modelMapper.map(from, AccountDTO.class);
